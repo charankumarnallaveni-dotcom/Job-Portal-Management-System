@@ -19,6 +19,7 @@ export function Jobs() {
   const [q, setQ] = useState("");
   const [location, setLocation] = useState("");
   const [jobs, setJobs] = useState<Job[]>(fallbackJobs);
+  const [appliedJobId, setAppliedJobId] = useState<number | null>(null);
   const debouncedQ = useDebounce(q);
   const debouncedLocation = useDebounce(location);
 
@@ -30,6 +31,7 @@ export function Jobs() {
 
   async function apply(jobId: number) {
     await api.post(`/candidate/jobs/${jobId}/apply`, { coverLetter: "I am interested in this role." });
+    setAppliedJobId(jobId);
   }
 
   return (
@@ -53,7 +55,7 @@ export function Jobs() {
             </div>
             <p className="mt-4 text-sm font-semibold">{currency(job.salary_min)} - {currency(job.salary_max)}</p>
             <div className="mt-4 flex flex-wrap gap-2">{job.skills.split(",").map((skill) => <Badge key={skill}>{skill}</Badge>)}</div>
-            <Button className="mt-5 w-full" onClick={() => apply(job.id)}>Apply</Button>
+            <Button className="mt-5 w-full" onClick={() => apply(job.id)}>{appliedJobId === job.id ? "Applied" : "Apply"}</Button>
           </Card>
         ))}
       </div>

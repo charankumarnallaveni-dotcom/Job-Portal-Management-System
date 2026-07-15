@@ -11,6 +11,18 @@ export function ManageUsers() {
   useEffect(() => {
     api.get("/admin/users").then((res) => setUsers(res.data.data)).catch(() => setUsers([]));
   }, []);
+
+  async function toggleStatus(user: User) {
+    const status = user.status === "suspended" ? "active" : "suspended";
+    await api.patch(`/admin/users/${user.id}/status`, { status });
+    setUsers((current) => current.map((item) => item.id === user.id ? { ...item, status } : item));
+  }
+
+  async function deleteUser(userId: number) {
+    await api.delete(`/admin/users/${userId}`);
+    setUsers((current) => current.filter((user) => user.id !== userId));
+  }
+
   return (
     <Card>
       <div className="flex items-center justify-between">
@@ -29,8 +41,8 @@ export function ManageUsers() {
                 <td className="capitalize">{user.role}</td>
                 <td><Badge>{user.status}</Badge></td>
                 <td className="flex gap-2 py-3">
-                  <Button variant="secondary" onClick={() => api.patch(`/admin/users/${user.id}/status`, { status: user.status === "suspended" ? "active" : "suspended" })}><ShieldCheck className="h-4 w-4" />Toggle</Button>
-                  <Button variant="danger" onClick={() => api.delete(`/admin/users/${user.id}`)}><Trash2 className="h-4 w-4" /></Button>
+                  <Button variant="secondary" onClick={() => toggleStatus(user)}><ShieldCheck className="h-4 w-4" />Toggle</Button>
+                  <Button variant="danger" onClick={() => deleteUser(user.id)}><Trash2 className="h-4 w-4" /></Button>
                 </td>
               </tr>
             ))}

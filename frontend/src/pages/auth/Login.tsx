@@ -11,6 +11,11 @@ export function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("admin@talentflow.dev");
   const [password, setPassword] = useState("Password123!");
+  const demoAccounts = [
+    ["Admin", "admin@talentflow.dev"],
+    ["Recruiter", "recruiter@talentflow.dev"],
+    ["Candidate", "candidate@talentflow.dev"]
+  ];
 
   async function submit(event: FormEvent) {
     event.preventDefault();
@@ -32,6 +37,13 @@ export function Login() {
         <Card className="w-full max-w-md">
           <h2 className="text-2xl font-bold">Sign in</h2>
           <p className="mt-1 text-sm text-slate-500">Use seeded credentials or your own account.</p>
+          <div className="mt-4 grid grid-cols-3 gap-2">
+            {demoAccounts.map(([label, account]) => (
+              <button key={account} type="button" onClick={() => setEmail(account)} className="rounded-md border border-slate-200 px-2 py-2 text-xs font-semibold text-slate-600 transition hover:border-primary hover:text-primary dark:border-slate-800 dark:text-slate-300">
+                {label}
+              </button>
+            ))}
+          </div>
           <form onSubmit={submit} className="mt-6 space-y-4">
             <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
             <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
