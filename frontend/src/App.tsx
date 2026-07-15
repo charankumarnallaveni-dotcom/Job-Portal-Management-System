@@ -11,10 +11,12 @@ import { ApplicationsPipeline } from "./pages/recruiter/ApplicationsPipeline";
 import { CandidateDashboard } from "./pages/candidate/CandidateDashboard";
 import { MyApplications } from "./pages/candidate/MyApplications";
 import { Jobs } from "./pages/Jobs";
+import { Home } from "./pages/Home";
 
 export function App() {
   return (
     <Routes>
+      <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -35,7 +37,7 @@ export function App() {
           </Route>
         </Route>
       </Route>
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
